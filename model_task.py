@@ -1,0 +1,60 @@
+from typing import Optional
+from pydantic import BaseModel
+
+class Task(BaseModel):
+    class Task1(BaseModel):
+        '''
+        K - середина отрезка K_start-K_end
+        M - делит в отношении M_top:M_bottom отрезок M_start-M_end
+        '''
+        K_start: str
+        K_end: str
+        M_top: int
+        M_bottom: int
+        M_start: str
+        M_end: str
+
+    class Task2(BaseModel):
+        '''
+        Найти разложение вектора d по векторам a, b, c
+        '''
+        a: list
+        b: list
+        c: list
+        d: list
+
+    class Task3(BaseModel):
+        '''
+        Найти косинус угла между a = a_m*m + a_n*n и b = b_m*m + b_n*n,
+        если |m|=len_m, |n|=len_n, угол(m;n)=angle
+        '''
+        a_m: int
+        a_n: int
+        b_m: int
+        b_n: int
+        len_m: str
+        len_n: str
+        angle: str
+
+    class Task4(BaseModel):
+        '''
+        Найти проекцию x на y, если x и y -
+        ЛК векторов a,b,c
+        '''
+        x_a: int
+        x_b: int
+        x_c: int
+        y_a: int
+        y_b: int
+        y_c: int
+        a: list
+        b: list
+        c: list
+
+    class Task5(BaseModel):
+        '''
+        Найти единичный вектор n0, перпендикулярный плоскости ABC
+        '''
+        A: list
+        B: list
+        C: list
