@@ -2,7 +2,7 @@ from local_functions import *
 from model_task import *
 from model_solution import *
 from fractions import Fraction
-from sympy import sqrt, symbols, Eq, solve, simplify, asin, cos
+from sympy import sqrt, symbols, Eq, solve, simplify, asin, cos, sin
 import numpy as np
 
 def solve_task1(task: Task.Task1):
@@ -63,3 +63,23 @@ def solve_task5(task: Task.Task5):
     length_n = sqrt(n[0]**2 + n[1]**2 + n[2]**2)
     n0 = [str(n[i] / length_n) for i in range(3)]
     return Solution.Solution_Task5(n0_x=n0[0], n0_y=n0[1], n0_z=n0[2])
+
+def solve_task6(task: Task.Task6):
+    AREA_MOD = task.subtask
+    a_m, a_n, b_m, b_n = task.a_m, task.a_n, task.b_m, task.b_n
+    m, n, angle = task.len_m, task.len_n, task.angle
+    mn_cross = m*n*sin(angle)
+    ab_cross = abs(a_m*b_n - a_n*b_m)*mn_cross
+    return Solution.Solution_Task6(answer=str(ab_cross / AREA_MOD))
+
+def solve_task7(task: Task.Task7):
+    subtask = task.subtask
+    a = task.a
+    b = task.b
+    c = task.c
+    if subtask > 1:
+        a = [task.B[i] - task.A[i] for i in range(3)]
+        b = [task.C[i] - task.A[i] for i in range(3)]
+        c = [task.D[i] - task.A[i] for i in range(3)]
+    det = np.dot(a, np.cross(b, c))
+    return Solution.Solution_Task7(det=det, answer=(not det))

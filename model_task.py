@@ -58,3 +58,32 @@ class Task(BaseModel):
         A: list
         B: list
         C: list
+    
+    class Task6(BaseModel):
+        '''
+        Найти площадь (1. треугольника / 2. параллелограмма)
+        на векторах a, b - ЛК m, n; если |m|=len_m,
+        |n|=len_n, угол (m;n) = angle
+        '''
+        subtask: int
+        a_m: int
+        a_n: int
+        b_m: int
+        b_n: int
+        len_m: int
+        len_n: int
+        angle: str
+
+    class Task7(BaseModel):
+        '''
+        Компланарны ли векторы a b c ИЛИ
+        Лежат ли в одной плоскости точки A B C D?
+        '''
+        subtask: int
+        A: list
+        B: list
+        C: list
+        D: list
+        a: list
+        b: list
+        c: list

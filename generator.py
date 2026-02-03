@@ -50,19 +50,20 @@ def gen_task1():
 
     return Task.Task1(K_start=K_start, K_end=K_end, M_top=division_of_M[0], M_bottom=division_of_M[1], M_start=M_start, M_end=M_end)
     
-
 def gen_task2():
+    RANGE = 6
+    M1 = 10 # Magic number 1
     ANSWER_LIST = [-2, -1, 1, 2]
+    DETER_LIST = [-1,1,2,-2,-4,4,-6,6]
 
     while True:
         poss_lst_row3 = []
-        row1 = [randint(-6, 6) for _ in range(3)]
-        row2 = [randint(-6, 6) for _ in range(3)]
-        deter = [-1,1,2,-2,-4,4,-6,6]
+        row1 = [randint(-RANGE, RANGE) for _ in range(3)]
+        row2 = [randint(-RANGE, RANGE) for _ in range(3)]
 
-        for x in range(-6, 7):
-            for y in range(-6, 7):
-                for z in range(-6, 7):
+        for x in range(-RANGE, RANGE+1):
+            for y in range(-RANGE, RANGE+1):
+                for z in range(-RANGE, RANGE+1):
                     a11, a12, a13 = row1
                     a21, a22, a23 = row2
                     a31, a32, a33 = x, y, z
@@ -72,7 +73,7 @@ def gen_task2():
                         a12*(a21*a33 - a23*a31) +
                         a13*(a21*a32 - a22*a31)
                     )
-                    if current_det in deter:
+                    if current_det in DETER_LIST:
                         poss_lst_row3.append([row1, row2, x, y, z, current_det])
         if len(poss_lst_row3) != 0:
             break
@@ -89,7 +90,7 @@ def gen_task2():
                 x_d = a0*a[0] + b0*b[0] + c0*c[0]
                 y_d = a0*a[1] + b0*b[1] + c0*c[1]
                 z_d = a0*a[2] + b0*b[2] + c0*c[2]
-                if (abs(x_d) <= 10 and abs(y_d) <= 10 and abs(z_d) <= 10):
+                if (abs(x_d) <= M1 and abs(y_d) <= M1 and abs(z_d) <= M1):
                     poss_lst_d.append([x_d, y_d, z_d])
 
     d = choice(poss_lst_d)
@@ -97,9 +98,10 @@ def gen_task2():
     return Task.Task2(a=a, b=b, c=c, d=[d[0], d[1], d[2]])
 
 def gen_task3():
-    DISTR = [i for i in range(1,10)]
-    DISTR_PROB = [(1/i - 0.1) for i in range(1,10)]
-    DISTR_PROB_NORM = [DISTR_PROB[i]/sum(DISTR_PROB) for i in range(9)]
+    RANGE = 9
+    DISTR = [i for i in range(1, RANGE+1)]
+    DISTR_PROB = [(1/i - 0.1) for i in range(1,RANGE+1)]
+    DISTR_PROB_NORM = [DISTR_PROB[i]/sum(DISTR_PROB) for i in range(RANGE)]
     ANGLES = {'pi/6': 'sqrt(3)', 'pi/4': 'sqrt(2)', 'pi/3': '2', '2*pi/3': '2', '3*pi/4': 'sqrt(2)', '5*pi/6': 'sqrt(3)'}
     LENGTHS = ['1', '2']
 
@@ -111,8 +113,8 @@ def gen_task3():
     angle = choice(list(ANGLES.keys()))
     length_m, length_n = choice(LENGTHS), choice(LENGTHS)
 
-    randomising = random.random()
-    if randomising < 0.5:
+    randomising = randint(1,2)
+    if randomising == 1:
         length_m = str(simplify(length_m + '*' + ANGLES.get(angle)))
     else:
         length_n = str(simplify(length_n + '*' + ANGLES.get(angle)))
@@ -209,3 +211,72 @@ def gen_task5():
             A[i], B[i], C[i] = A[i] - min([B[i], C[i]]) - M1, B[i] - min([B[i], C[i]]) - M1, C[i] - min([B[i], C[i]]) - M1
 
     return Task.Task5(A=A, B=B, C=C)
+
+def gen_task6():
+    ANGLES = ['pi/6', 'pi/4', 'pi/3', '2*pi/3', '3*pi/4', '5*pi/6']
+    M1 = 4
+    M2 = 5
+    a_m, a_n, b_m, b_n = [randint(1,M1)*(-1)**randint(1,2) for _ in range(4)]
+    while (a_m*b_n - a_n*b_m == 0):
+        a_m, a_n, b_m, b_n = [randint(1,M1)*(-1)**randint(1,2) for _ in range(4)]
+    length_m, length_n = [randint(1,M2) for _ in range(2)]
+    angle = choice(ANGLES)
+    subtask = randint(1,2)
+
+    return Task.Task6(a_m=a_m, a_n=a_n, b_m=b_m, b_n=b_n, len_m=length_m, len_n=length_n, angle=angle, subtask=subtask)
+
+def gen_task7():
+
+    def gen_subtask1(row1, row2, row3):
+        return Task.Task7(subtask=1, A=[], B=[], C=[], D=[], a=[row1[0], row2[0], row3[0]], 
+                          b=[row1[1], row2[1], row3[1]], c=[row1[2], row2[2], row3[2]])
+    
+    def gen_subtask2(row1, row2, row3, subtask):
+        M1 = 15
+        a=[row1[0], row2[0], row3[0]]
+        b=[row1[1], row2[1], row3[1]]
+        c=[row1[2], row2[2], row3[2]]
+        A = [randint(-(RANGE + 1), RANGE + 1) for _ in range(3)]
+        B = [A[i] + a[i] for i in range(3)]
+        C = [A[i] + b[i] for i in range(3)]
+        D = [A[i] + c[i] for i in range(3)]
+
+        for i in range(3):
+            if B[i] > M1 or C[i] > M1 or D[i] > M1:
+                A[i], B[i] = A[i] - max([B[i], C[i], D[i]]) + M1, B[i] - max([B[i], C[i], D[i]]) + M1
+                C[i], D[i] = C[i] - max([B[i], C[i], D[i]]) + M1, D[i] - max((B[i], C[i], D[i])) + M1
+            if B[i] < -M1 or C[i] < -M1 or D[i] < -M1:
+                A[i], B[i] = A[i] - min([B[i], C[i], D[i]]) - M1, B[i] - min([B[i], C[i], D[i]]) - M1
+                C[i], D[i] = C[i] - min([B[i], C[i], D[i]]) - M1, D[i] - min([B[i], C[i], D[i]]) - M1
+
+        return Task.Task7(subtask=subtask, A=A, B=B, C=C, D=D, a=[], b=[], c=[])
+    
+    RANGE = 9
+    randomiser_ans = randint(0,1)
+    while True:
+        poss_lst_row3 = []
+        row1 = [randint(-RANGE, RANGE) for _ in range(3)]
+        row2 = [randint(-RANGE, RANGE) for _ in range(3)]
+
+        for x in range(-RANGE, RANGE+1):
+            for y in range(-RANGE, RANGE+1):
+                for z in range(-RANGE, RANGE+1):
+                    a11, a12, a13 = row1
+                    a21, a22, a23 = row2
+                    a31, a32, a33 = x, y, z
+                    
+                    current_det = (
+                        a11*(a22*a33 - a23*a32) -
+                        a12*(a21*a33 - a23*a31) +
+                        a13*(a21*a32 - a22*a31)
+                    )
+                    if abs(current_det) <= RANGE*randomiser_ans:
+                        poss_lst_row3.append([row1, row2, x, y, z, current_det])
+        if len(poss_lst_row3) != 0:
+            break
+    chosen = choice(poss_lst_row3)
+    row3 = [chosen[i] for i in range(2,5)]
+    randomiser_task = randint(1,3)
+    print(chosen, row2)
+    DICT_TASK = {1: gen_subtask1(row1, row2, row3), 2: gen_subtask2(row1, row2, row3, 2), 3: gen_subtask2(row1, row2, row3, 3)}
+    return DICT_TASK[randomiser_task]

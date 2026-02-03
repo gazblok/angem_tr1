@@ -52,16 +52,41 @@ def valid_task5(user_input: Answer):
         EPS = 0.001
         true_solution = solve_task5(user_input.task)
         user_solution = user_input.answer
-        check_a = abs(N(true_solution.n0_x) - N(user_solution.n0_x)) < EPS
-        check_b = abs(N(true_solution.n0_y) - N(user_solution.n0_y)) < EPS
-        check_c = abs(N(true_solution.n0_z) - N(user_solution.n0_z)) < EPS
-        return check_a and check_b and check_c
+        check_a_pos = abs(N(true_solution.n0_x) - N(user_solution.n0_x)) < EPS
+        check_b_pos = abs(N(true_solution.n0_y) - N(user_solution.n0_y)) < EPS
+        check_c_pos = abs(N(true_solution.n0_z) - N(user_solution.n0_z)) < EPS
+        check_a_neg = abs(N(true_solution.n0_x) + N(user_solution.n0_x)) < EPS
+        check_b_neg = abs(N(true_solution.n0_y) + N(user_solution.n0_y)) < EPS
+        check_c_neg = abs(N(true_solution.n0_z) + N(user_solution.n0_z)) < EPS
+        return (check_a_pos and check_b_pos and check_c_pos) or (check_a_neg and check_b_neg and check_c_neg)
+    except:
+        return False
+    
+def valid_task6(user_input: Answer):
+    try:
+        EPS = 0.001
+        true_solution = solve_task6(user_input.task)
+        user_solution = user_input.answer
+        check_answer = abs(N(true_solution.answer) - N(user_solution.answer)) < EPS
+        return check_answer
     except:
         return False
 
-user_inp = Answer(task_num=5, answer=Solution.Solution_Task5(n0_x='0.818', n0_y='-sqrt(6)/6', n0_z='sqrt(6)/6'), 
+def valid_task7(user_input: Answer):
+    try:
+        true_solution = solve_task7(user_input.task)
+        user_solution = user_input.answer
+        check_a = true_solution.answer == user_solution.answer
+        check_b = true_solution.det == user_solution.det
+        return check_a and check_b
+    except:
+        return False
+
+
+user_inp = Answer(task_num=5, answer=Solution.Solution_Task5(n0_x='0.817', n0_y='-sqrt(6)/6', n0_z='sqrt(6)/6'), 
                   task=Task.Task5(A=[10,-9,-6], B=[12,-14,-15], C=[10,-7,-4]))
 
 DICT_OF_TASKS = {1: valid_task1(user_inp), 2: valid_task2(user_inp), 3: valid_task3(user_inp),
-                 4: valid_task4(user_inp), 5: valid_task5(user_inp)}
+                 4: valid_task4(user_inp), 5: valid_task5(user_inp), 6: valid_task6(user_inp),
+                 7: valid_task7(user_inp)}
 #print(DICT_OF_TASKS.get(user_inp.task_num))

@@ -34,9 +34,20 @@ class Solution(BaseModel):
         n0_x: Optional[str] = ''
         n0_y: Optional[str] = ''
         n0_z: Optional[str] = ''
-
+    class Solution_Task6(BaseModel):
+        '''
+        Площадь фигуры
+        '''
+        answer: Optional[str] = ''
+    class Solution_Task7(BaseModel):
+        '''
+        Комаланарны ли (да/нет) и определитель
+        '''
+        answer: Optional[bool] = False
+        det: Optional[int] = 0
 
 class Answer(BaseModel):
     task_num: int
-    task: Union[Task.Task1, Task.Task2, Task.Task3, Task.Task4, Task.Task5]
-    answer: Union[Solution.Solution_Task1, Solution.Solution_Task2, Solution.Solution_Task3, Solution.Solution_Task4, Solution.Solution_Task5]
+    task: Union[Task.Task1, Task.Task2, Task.Task3, Task.Task4, Task.Task5, Task.Task6, Task.Task7]
+    answer: Union[Solution.Solution_Task1, Solution.Solution_Task2, Solution.Solution_Task3, Solution.Solution_Task4, Solution.Solution_Task5,
+                  Solution.Solution_Task6, Solution.Solution_Task7]
