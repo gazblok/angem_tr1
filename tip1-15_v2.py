@@ -1,4 +1,4 @@
-from sympy import sqrt, symbols, Eq, solve, simplify, asin, pi, cos, sin
+from sympy import sqrt, symbols, Eq, solve, simplify, asin, pi, cos, sin, evaluate
 from local_functions import flat, dots, line
 import numpy as np
 from fractions import Fraction
@@ -298,22 +298,26 @@ while MAIN != 0:
         print('1. Объём тетраэдра')
         print('2. Объём параллепипеда')
         que = int(input('Выберите, что нужно вычислить: '))
-        if que == 2:
-            que = 6
         H = dots(input('Координаты точки, из которой проведена высота: '))
         print('Введите остальные данные точки')
         A = dots(input('Точка 1: '))
         B = dots(input('Точка 2: '))
         C = dots(input('Точка 3: '))
-        a = [int(A[i]) - int(B[i]) for i in range(3)]
-        b = [int(A[i]) - int(C[i]) for i in range(3)]
-        c = [int(A[i]) - int(H[i]) for i in range(3)]
-        V = np.dot(a, np.cross(b, c))
-        print('V =', V*(que/6))
+        a = [int(B[i]) - int(A[i]) for i in range(3)]
+        b = [int(C[i]) - int(A[i]) for i in range(3)]
+        c = [int(H[i]) - int(A[i]) for i in range(3)]
+        print(a, b, c)
+        V = abs(np.dot(a, np.cross(b, c))*(1/(-5*que+11)))
+        print('V =', simplify(V))
         v_ab = np.cross(a, b)
-        S = sqrt(v_ab[0]**2 + v_ab[1]**2 + v_ab[2]**2)
-        print('S =', S)
-        print('h =', simplify(V/S))
+        print(v_ab)
+        S = sqrt(v_ab[0]**2 + v_ab[1]**2 + v_ab[2]**2)*(1/(3-que))
+        print('S =', simplify(S))
+        with evaluate(False):
+            print(V/S)
+        print(V/S)
+        h = (V/S)*(-2*que+5)
+        print('h =', simplify(h))
         input()
 
 
@@ -332,6 +336,7 @@ while MAIN != 0:
         B2 = S_b[1]
         C2 = S_b[2]
         D2 = S_b[3]
+        print(S_a, S_b, np.dot(S_a, S_b))
         print('cos(a,b) =', abs(A1*A2 + B1*B2 + C1*C2) / ((sqrt(A1**2 + B1**2 + C1**2)) * (sqrt(A2**2 + B2**2 + C2**2))))
         input()
 
@@ -359,6 +364,7 @@ while MAIN != 0:
         equation = [Eq(ga, v_cr[2] // GCD), Eq(abs(al*int(S[0]) + be*int(S[1]) + ga*int(S[2]) + de) / (sqrt(al**2+be**2+ga**2)), ro)]
         solution = solve(equation, ro)   
         print('Расстояние =', solution[ro])
+        print((abs(al*int(S[0]) + be*int(S[1]) + ga*int(S[2]) + de)) / (sqrt(al**2 + be**2 + ga**2)))
         input()
 
         

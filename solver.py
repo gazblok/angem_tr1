@@ -5,6 +5,12 @@ from fractions import Fraction
 from sympy import sqrt, symbols, Eq, solve, simplify, asin, cos, sin
 import numpy as np
 
+def solvers(task: Task):
+    SOLVERS_DICT = {1: solve_task1, 2: solve_task2, 3: solve_task3, 4: solve_task4, 
+                    5: solve_task5, 6: solve_task6, 7: solve_task7, 8: solve_task8,
+                    9: solve_task9}
+    return SOLVERS_DICT[task.task_code_number](task)
+
 def solve_task1(task: Task.Task1):
     LETTER_TO_NUM = {'A': [0,0,0], 'B': [1,0,0], 'C': [1,1,0], 'D': [0,1,0],
                     'A1': [0,0,1], 'B1': [1,0,1], 'C1': [1,1,1], 'D1': [0,1,1]}
@@ -83,3 +89,24 @@ def solve_task7(task: Task.Task7):
         c = [task.D[i] - task.A[i] for i in range(3)]
     det = np.dot(a, np.cross(b, c))
     return Solution.Solution_Task7(det=det, answer=(not det))
+
+def solve_task8(task: Task.Task8):
+    COEFFS_DICT = {1: [1/6, 1/2, 3], 2: [1, 1, 1]}
+    a = [task.B[i] - task.A[i] for i in range(3)]
+    b = [task.C[i] - task.A[i] for i in range(3)]
+    c = [task.H[i] - task.A[i] for i in range(3)]
+    subtask = task.subtask
+    vol_coef, surf_coef, height_coef = COEFFS_DICT[subtask]
+    Volume = abs(np.dot(a, np.cross(b, c))*vol_coef)
+    Surf_area_vect = np.cross(b, c)
+    Surf_area = sqrt(sum([Surf_area_vect[i]**2 for i in range(3)]))*surf_coef
+    height = (Volume/Surf_area)*height_coef
+    return Solution.Solution_Task8(Volume=str(Volume), Surf_area=str(Surf_area), height=str(height))
+
+def solve_task9(task: Task.Task9):
+    norm_1 = [task.A1, task.B1, task.C1]
+    norm_2 = [task.A2, task.B2, task.C2]
+    norm_1_len = sqrt(norm_1[0]**2 + norm_1[1]**2 + norm_1[2]**2)
+    norm_2_len = sqrt(norm_2[0]**2 + norm_2[1]**2 + norm_2[2]**2)
+    answer = abs(np.dot(norm_1, norm_2) / (norm_1_len*norm_2_len))
+    return Solution.Solution_Task9(answer=str(answer))

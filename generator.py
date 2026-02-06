@@ -4,6 +4,12 @@ from model_task import *
 from numpy import random
 from sympy import sqrt, simplify
 
+def generate(task_num: int):
+    GEN_DICT = {1: gen_task1, 2: gen_task2, 3: gen_task3, 4: gen_task4,
+                5: gen_task5, 6: gen_task6, 7: gen_task7, 8: gen_task8,
+                9: gen_task9}
+    return GEN_DICT[task_num]()
+
 def gen_task1():
 
     def swap(number):
@@ -48,7 +54,7 @@ def gen_task1():
     M_start = NUM_TO_LETTER.get(M_start_pos_tuple)
     M_end = NUM_TO_LETTER.get(M_end_pos_tuple)
 
-    return Task.Task1(K_start=K_start, K_end=K_end, M_top=division_of_M[0], M_bottom=division_of_M[1], M_start=M_start, M_end=M_end)
+    return Task.Task1(task_code_number=1, K_start=K_start, K_end=K_end, M_top=division_of_M[0], M_bottom=division_of_M[1], M_start=M_start, M_end=M_end)
     
 def gen_task2():
     RANGE = 6
@@ -95,7 +101,7 @@ def gen_task2():
 
     d = choice(poss_lst_d)
 
-    return Task.Task2(a=a, b=b, c=c, d=[d[0], d[1], d[2]])
+    return Task.Task2(task_code_number=2, a=a, b=b, c=c, d=[d[0], d[1], d[2]])
 
 def gen_task3():
     RANGE = 9
@@ -119,7 +125,7 @@ def gen_task3():
     else:
         length_n = str(simplify(length_n + '*' + ANGLES.get(angle)))
 
-    return Task.Task3(a_m=a_m, a_n=a_n, b_m=b_m, b_n=b_n, len_m=length_m, len_n=length_n, angle=angle)
+    return Task.Task3(task_code_number=3, a_m=a_m, a_n=a_n, b_m=b_m, b_n=b_n, len_m=length_m, len_n=length_n, angle=angle)
 
 def gen_task4():
 
@@ -172,7 +178,8 @@ def gen_task4():
     dict_of_frees[randomised_proj_free_letter] = randomised_proj_free
     dict_of_frees[final_letter] = final
 
-    return Task.Task4(x_a = x_coord['a'], x_b = x_coord['b'], x_c = x_coord['c'],
+    return Task.Task4(task_code_number=4,
+                      x_a = x_coord['a'], x_b = x_coord['b'], x_c = x_coord['c'],
                       y_a = y_coord['a'], y_b = y_coord['b'], y_c = y_coord['c'],
                       a = dict_of_frees['a'], b = dict_of_frees['b'], c = dict_of_frees['c'])
 
@@ -210,7 +217,7 @@ def gen_task5():
         if B[i] < -M1 or C[i] < -M1:
             A[i], B[i], C[i] = A[i] - min([B[i], C[i]]) - M1, B[i] - min([B[i], C[i]]) - M1, C[i] - min([B[i], C[i]]) - M1
 
-    return Task.Task5(A=A, B=B, C=C)
+    return Task.Task5(task_code_number=5, A=A, B=B, C=C)
 
 def gen_task6():
     ANGLES = ['pi/6', 'pi/4', 'pi/3', '2*pi/3', '3*pi/4', '5*pi/6']
@@ -223,12 +230,15 @@ def gen_task6():
     angle = choice(ANGLES)
     subtask = randint(1,2)
 
-    return Task.Task6(a_m=a_m, a_n=a_n, b_m=b_m, b_n=b_n, len_m=length_m, len_n=length_n, angle=angle, subtask=subtask)
+    return Task.Task6(task_code_number=6, subtask=subtask,
+                      a_m=a_m, a_n=a_n, b_m=b_m, b_n=b_n, 
+                      len_m=length_m, len_n=length_n, angle=angle)
 
 def gen_task7():
 
-    def gen_subtask1(row1, row2, row3):
-        return Task.Task7(subtask=1, A=[], B=[], C=[], D=[], a=[row1[0], row2[0], row3[0]], 
+    def gen_subtask1(row1, row2, row3, subtask):
+        return Task.Task7(task_code_number=7, subtask=subtask, 
+                          A=[], B=[], C=[], D=[], a=[row1[0], row2[0], row3[0]], 
                           b=[row1[1], row2[1], row3[1]], c=[row1[2], row2[2], row3[2]])
     
     def gen_subtask2(row1, row2, row3, subtask):
@@ -249,7 +259,8 @@ def gen_task7():
                 A[i], B[i] = A[i] - min([B[i], C[i], D[i]]) - M1, B[i] - min([B[i], C[i], D[i]]) - M1
                 C[i], D[i] = C[i] - min([B[i], C[i], D[i]]) - M1, D[i] - min([B[i], C[i], D[i]]) - M1
 
-        return Task.Task7(subtask=subtask, A=A, B=B, C=C, D=D, a=[], b=[], c=[])
+        return Task.Task7(task_code_number=7, subtask=subtask, 
+                          A=A, B=B, C=C, D=D, a=[], b=[], c=[])
     
     RANGE = 9
     randomiser_ans = randint(0,1)
@@ -277,6 +288,62 @@ def gen_task7():
     chosen = choice(poss_lst_row3)
     row3 = [chosen[i] for i in range(2,5)]
     randomiser_task = randint(1,3)
-    print(chosen, row2)
-    DICT_TASK = {1: gen_subtask1(row1, row2, row3), 2: gen_subtask2(row1, row2, row3, 2), 3: gen_subtask2(row1, row2, row3, 3)}
-    return DICT_TASK[randomiser_task]
+    DICT_TASK = {1: gen_subtask1, 2: gen_subtask2, 3: gen_subtask2}
+    return DICT_TASK[randomiser_task](row1, row2, row3, randomiser_task)
+
+def gen_task8():
+    subtask = randint(1,2)
+    RANGE = 9
+    while True:
+        poss_lst_row3 = []
+        row1 = [randint(-RANGE, RANGE) for _ in range(3)]
+        row2 = [randint(-RANGE, RANGE) for _ in range(3)]
+
+        for x in range(-RANGE, RANGE+1):
+            for y in range(-RANGE, RANGE+1):
+                for z in range(-RANGE, RANGE+1):
+                    a11, a12, a13 = row1
+                    a21, a22, a23 = row2
+                    a31, a32, a33 = x, y, z
+                    
+                    current_det = (
+                        a11*(a22*a33 - a23*a32) -
+                        a12*(a21*a33 - a23*a31) +
+                        a13*(a21*a32 - a22*a31)
+                    )
+                    if 0 < abs(current_det) <= RANGE:
+                        poss_lst_row3.append([row1, row2, x, y, z, current_det])
+        if len(poss_lst_row3) != 0:
+            break
+    chosen = choice(poss_lst_row3)
+    row3 = [chosen[i] for i in range(2,5)]
+    M1 = 15
+    a=[row1[0], row2[0], row3[0]]
+    b=[row1[1], row2[1], row3[1]]
+    c=[row1[2], row2[2], row3[2]]
+    A = [randint(-(RANGE + 1), RANGE + 1) for _ in range(3)]
+    B = [A[i] + a[i] for i in range(3)]
+    C = [A[i] + b[i] for i in range(3)]
+    D = [A[i] + c[i] for i in range(3)]
+
+    for i in range(3):
+        if B[i] > M1 or C[i] > M1 or D[i] > M1:
+            A[i], B[i] = A[i] - max([B[i], C[i], D[i]]) + M1, B[i] - max([B[i], C[i], D[i]]) + M1
+            C[i], D[i] = C[i] - max([B[i], C[i], D[i]]) + M1, D[i] - max((B[i], C[i], D[i])) + M1
+        if B[i] < -M1 or C[i] < -M1 or D[i] < -M1:
+            A[i], B[i] = A[i] - min([B[i], C[i], D[i]]) - M1, B[i] - min([B[i], C[i], D[i]]) - M1
+            C[i], D[i] = C[i] - min([B[i], C[i], D[i]]) - M1, D[i] - min([B[i], C[i], D[i]]) - M1
+    return Task.Task8(task_code_number=8, subtask=subtask, A=A, B=B, C=C, H=D)
+
+def gen_task9():
+    RANGE = 5
+    A1, B1, C1 = [randint(-RANGE, RANGE) for _ in range(3)]
+    A2, B2, C2 = [randint(-RANGE, RANGE) for _ in range(3)]
+    D1, D2 = [randint(-3*RANGE, 3*RANGE) for _ in range(2)]
+    while (A1 == 0) and (B1 == 0) and (C1 == 0):
+        A1, B1, C1 = [randint(-RANGE, RANGE) for _ in range(3)]
+    while (A2 == 0) and (B2 == 0) and (C2 == 0):
+        A2, B2, C2 = [randint(-RANGE, RANGE) for _ in range(3)]
+    while (A1*B2 - B1*A2) == 0 or (C2*A1 - A2*C1) == 0 or (B1*C2 - C1*B2) == 0:
+        A2, B2, C2 = [randint(-RANGE, RANGE) for _ in range(3)]
+    return Task.Task9(task_code_number=9, A1=A1, B1=B1, C1=C1, D1=D1, A2=A2, B2=B2, C2=C2, D2=D2)
