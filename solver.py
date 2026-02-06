@@ -8,7 +8,7 @@ import numpy as np
 def solvers(task: Task):
     SOLVERS_DICT = {1: solve_task1, 2: solve_task2, 3: solve_task3, 4: solve_task4, 
                     5: solve_task5, 6: solve_task6, 7: solve_task7, 8: solve_task8,
-                    9: solve_task9}
+                    9: solve_task9, 10: solve_task10}
     return SOLVERS_DICT[task.task_code_number](task)
 
 def solve_task1(task: Task.Task1):
@@ -110,3 +110,17 @@ def solve_task9(task: Task.Task9):
     norm_2_len = sqrt(norm_2[0]**2 + norm_2[1]**2 + norm_2[2]**2)
     answer = abs(np.dot(norm_1, norm_2) / (norm_1_len*norm_2_len))
     return Solution.Solution_Task9(answer=str(answer))
+
+def solve_task10(task: Task.Task10):
+    AB = [task.B[i] - task.A[i] for i in range(3)]
+    AC = [task.C[i] - task.A[i] for i in range(3)]
+    A = task.A
+    S = task.S
+    norm_vect = np.cross(AB, AC)
+    GCD = np.gcd.reduce(norm_vect)
+    surf_a = norm_vect[0] // GCD
+    surf_b = norm_vect[1] // GCD
+    surf_c = norm_vect[2] // GCD
+    surf_d = -(surf_a*A[0] + surf_b*A[1] + surf_c*A[2])
+    distance = (abs(surf_a*S[0] + surf_b*S[1] + surf_c*S[2] + surf_d)) / (sqrt(surf_a**2 + surf_b**2 + surf_c**2))
+    return Solution.Solution_Task10(surf_a=surf_a, surf_b=surf_b, surf_c=surf_c, surf_d=surf_d, distance=str(distance))

@@ -122,3 +122,9 @@ class Task(BaseModel):
         B2: int
         C2: int
         D2: int
+    class Task10(BaseModel):
+        task_code_number: int
+        A: list
+        B: list
+        C: list
+        S: list

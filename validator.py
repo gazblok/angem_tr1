@@ -6,8 +6,10 @@ from sympy import sqrt, symbols, Eq, solve, simplify, asin, pi, cos, sin, N
 
 def valid(user_input: Answer):
     DICT_OF_TASKS = {1: valid_task1, 2: valid_task2, 3: valid_task3, 4: valid_task4,
-                     5: valid_task5, 6: valid_task6, 7: valid_task7, 8: valid_task8}
-    return DICT_OF_TASKS[user_input.task_num](user_input)
+                     5: valid_task5, 6: valid_task6, 7: valid_task7, 8: valid_task8,
+                     9: valid_task9, 10: valid_task10}
+    print(user_input)
+    return DICT_OF_TASKS[user_input.task.task_code_number](user_input)
 
 def valid_task1(user_input: Answer):
     try:
@@ -45,7 +47,7 @@ def valid_task3(user_input: Answer):
 def valid_task4(user_input: Answer):
     try:
         EPS = 0.001
-        true_solution = solve_task3(user_input.task)
+        true_solution = solve_task4(user_input.task)
         user_solution = user_input.answer
         check_answer = abs(N(true_solution.answer) - N(user_solution.answer)) < EPS
         return check_answer
@@ -98,9 +100,34 @@ def valid_task8(user_input: Answer):
         return check_a and check_b and check_c
     except:
         return False
+    
+def valid_task9(user_input: Answer):
+    try:
+        EPS = 0.001
+        true_solution = solve_task9(user_input.task)
+        user_solution = user_input.answer
+        check_answer = abs(N(true_solution.answer) - N(user_solution.answer)) < EPS
+        return check_answer
+    except:
+        return False
 
+def valid_task10(user_input: Answer):
+    try:
+        EPS = 0.001
+        true_solution = solve_task10(user_input.task)
+        user_solution = user_input.answer
+        true_n = [true_solution.surf_a, true_solution.surf_b, true_solution.surf_c]
+        user_n = [user_solution.surf_a, user_solution.surf_b, user_solution.surf_c]
+        cross_surface = [true_n[1]*user_n[2] - user_n[1]*true_n[2], 
+                         user_n[0]*true_n[2] - true_n[0]*user_n[2], 
+                         true_n[0]*user_n[1] - user_n[0]*true_n[1]]
+        check_surface = (cross_surface.count(0) == 3)
+        check_distance = abs(N(true_solution.distance) - N(user_solution.distance)) < EPS
+        return check_surface and check_distance
+    except:
+        return False
 
-user_inp = Answer(task_num=5, answer=Solution.Solution_Task5(n0_x='0.817', n0_y='-sqrt(6)/6', n0_z='sqrt(6)/6'), 
+user_inp = Answer(answer=Solution.Solution_Task5(n0_x='0.817', n0_y='-sqrt(6)/6', n0_z='sqrt(6)/6'), 
                   task=Task.Task5(task_code_number=5, A=[10,-9,-6], B=[12,-14,-15], C=[10,-7,-4]))
 
 DICT_OF_TASKS = {1: valid_task1, 2: valid_task2, 3: valid_task3, 4: valid_task4,

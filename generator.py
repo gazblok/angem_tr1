@@ -201,7 +201,7 @@ def gen_task5():
 
     for AB_x in range(-RANGE, RANGE + 1):
         for AC_x in range(-RANGE, RANGE + 1):
-            if (0 < abs(AB_x*AC_y - AB_y*AC_x) < 10) and (0 < abs(-AB_x*AC_z + AB_z*AC_x) < RANGE + 1):
+            if (0 < abs(AB_x*AC_y - AB_y*AC_x) < RANGE + 1) and (0 < abs(-AB_x*AC_z + AB_z*AC_x) < RANGE + 1):
                 poss_lst_x.append([AB_x, AC_x])
 
     chosen_x = choice(poss_lst_x)
@@ -347,3 +347,16 @@ def gen_task9():
     while (A1*B2 - B1*A2) == 0 or (C2*A1 - A2*C1) == 0 or (B1*C2 - C1*B2) == 0:
         A2, B2, C2 = [randint(-RANGE, RANGE) for _ in range(3)]
     return Task.Task9(task_code_number=9, A1=A1, B1=B1, C1=C1, D1=D1, A2=A2, B2=B2, C2=C2, D2=D2)
+
+def gen_task10():
+    func_task = gen_task5()
+    A = func_task.A
+    B = func_task.B
+    C = func_task.C
+    AB = [B[i] - A[i] for i in range(3)]
+    AC = [C[i] - A[i] for i in range(3)]
+    norm_vect = [AB[1]*AC[2] - AC[1]*AB[2], AC[0]*AB[2] - AB[0]*AC[2], AB[0]*AC[1] - AC[0]*AB[1]]
+    S = [randint(-8,8) for _ in range(3)]
+    while sum([norm_vect[i]*(S[i] - A[i]) for i in range(3)]) == 0:
+        S = [randint(-8,8) for _ in range(3)]
+    return Task.Task10(task_code_number=10, A=A, B=B, C=C, S=S)
